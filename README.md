@@ -1,6 +1,6 @@
 # projetIA
 
-## Part 1
+## Step 1: Introduction to CNNs
 ### What is a Convolutional Neural Network (CNN)?
 
 A Convolutional Neural Network, is a type of artificial neural network that is specialized in processing images. It learns to recognize spatial patterns within images by analyzing their pixel values, represented by RGB channels. The imaeges are processed through successive layers that can learn increasingly complex features.
@@ -38,7 +38,7 @@ Fully connected layers are usually placed near the end of a CNN. Their purpose i
 
 In these layers, each neuron is connected to every neuron from the previous layer. This allows the network to combine the different features it has learned to help recognize what is present in the image.
 
-## Part 3
+## Step 3: Build your own CNN Model
 
 ### How many parameters does our model have:
 
@@ -91,8 +91,8 @@ $$P1 = (3 \times 3 \times 64 + 1) \times 128 = 73856$$
 
 $$P1 = (3 \times 3 \times 128 + 1) \times 256 = 295168$$
 
-#### Maxpooling, Flatten layers and Dropout layers:
-These layers have 0 trainable parameters. MaxPooling reduces the size of feature maps, Flatten reorganizes them into a one-dimensional array, and Dropout randomly deactivates 50% of its inputs during training.
+#### Maxpooling and Flatten layers:
+These layers have 0 trainable parameters. MaxPooling reduces the size of feature maps, Flatten reorganizes them into a one-dimensional array.
 
 #### Fully connected layers:
 
@@ -125,3 +125,59 @@ $$P_{total} = P_{Conv2D} + P_{Dense1} + P_{Dense2}$$
 $$P_{total} = 388,416 + 1,605,760 + 129$$
 
 $$\boxed{P_{total} = 1,994,305}$$
+
+#### Choice of optimizer and loss function
+
+We chose Adam as our optimizer because it automatically adjusts the learning rate for each parameter during training, allowing the model to learn efficiently.
+
+We chose binary cross-entropy as our loss function because we are dealing with a binary classification problem (cats and dogs). It measures the difference between the predicted probabilities and the actual labels, penalizing incorrect predictions.
+
+Finally, we use accuracy as our evaluation metric, which represents the proportion of images correctly classified by our CNN.
+
+## Step 4: Train the model
+
+We trained our CNN for 10 epochs, using a batch size of 100 images
+During training, accuracy increased from approximately 53% to 76%, while validation accuracy increased from 60% to 73%. Both training and validation loss also decreased throughout the process.
+
+We can observe a small gap between training and validation accuracy during the final epochs, suggesting early signs of overfitting. However, since validation accuracy continues increasing and validation loss continues decreasing, the model does not appear to be significantly overfitting yet.
+
+Overall, the model is learning useful features, although its accuracy leaves room for improvement.
+
+## Step 5: Evaluate the Model on the test set
+
+We evaluated our CNN on the test set containing 400 images.
+The results were:
+- Accuracy: 73.5%
+- Precision: 73.5%
+- Recall: 73.5%
+- F1-score: 73.5%
+
+Overall, the CNN has learned to distinguish cats from dogs, but its performance leaves room for improvement.
+
+## Step 6: Attempt to improve the model
+
+### Data augmentation:
+We applied random rotations, shifts, zooms, and horizontal flips to the training images to increase their diversity.
+
+After 10 epochs, the augmented CNN achieved a maximum validation accuracy of 65.7%, compared to 72.7% for the baseline model.
+
+Data augmentation therefore did not improve performance in this experiment, with a decrease of 7 percentage points. One possible explanation is that the transformations made training more difficult, and the model may require additional epochs to benefit from them.
+
+### Dropout
+We added a Dropout layer with a rate of 0.5 to reduce overfitting by randomly deactivating 50% of its inputs during training.
+
+After 10 epochs, the model achieved a maximum validation accuracy of 67.2%, compared to 72.7% for the baseline.
+
+Dropout therefore did not improve performance in this experiment. Since our baseline model showed limited signs of overfitting, the additional regularization may have slowed down learning.
+
+### Batch normalization
+We added Batch Normalization layers after each convolutional layer to stabilize the training process.
+
+After 10 epochs, the model achieved a maximum validation accuracy of 53.5%, compared to 72.7% for the baseline model.
+
+Despite reaching approximately 86.4% training accuracy, validation accuracy remained close to 50%. This suggests a significant generalization problem, potentially caused by overfitting or differences between the Batch Normalization statistics used during training and validation.
+
+### Conclusion
+Overall, none of the three techniques improved our CNN's performance. The baseline model remained the best-performing configuration, achieving 72.7% validation accuracy.
+
+However, this does not mean these techniques are ineffective. Their performance depends on the model architecture, the dataset, and the training conditions. Since we only trained each model for 10 epochs, further experimentation could produce different results.
